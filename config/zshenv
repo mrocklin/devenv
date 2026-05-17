@@ -1,0 +1,2 @@
+# ~/.zshenv — sourced for all zsh invocations (incl. non-interactive).
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"

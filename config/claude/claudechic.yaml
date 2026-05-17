@@ -1,0 +1,11 @@
+analytics:
+  enabled: true
+experimental:
+  finish_worktree: true
+logging:
+  file: ~/claudechic.log
+  notify-level: warning
+max-thinking-tokens: 10000
+recent-tools-expanded: 2
+theme: chic
+vi-mode: true

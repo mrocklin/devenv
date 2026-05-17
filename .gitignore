@@ -1,0 +1,9 @@
+# Never commit real secrets
+secrets.env
+*.local
+
+# nvim plugin lockfile is fine to track, but lazy state is not
+config/nvim/lazy-lock.json.local
+
+# OS junk
+.DS_Store

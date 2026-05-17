@@ -1,0 +1,38 @@
+# ~/.zshrc — symlinked from devenv repo.
+
+# Prompt + vi mode
+PROMPT="%~$ "
+set -o vi
+eval "$(starship init zsh)"
+
+# Completion
+autoload -U compinit
+compinit
+
+# PATH — uv installer drops env here; cargo via .zshenv
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+export PATH="$HOME/.local/bin:$PATH"
+
+# Homebrew on Apple Silicon (no-op on Linux/Intel)
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Editor
+export EDITOR=nvim
+alias vi='nvim'
+
+# Convenience
+export CLICOLOR=1
+[ "$(uname -s)" = "Darwin" ] && alias timeout=gtimeout
+# Debian/Ubuntu ship bat/fd as batcat/fdfind to avoid name collisions
+command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1 && alias bat=batcat
+command -v fdfind >/dev/null 2>&1 && ! command -v fd  >/dev/null 2>&1 && alias fd=fdfind
+bindkey '^R' history-incremental-search-backward
+
+# Composio CLI (if installed)
+if [ -d "$HOME/.composio" ]; then
+    export COMPOSIO_INSTALL_DIR="$HOME/.composio"
+    export PATH="$COMPOSIO_INSTALL_DIR:$PATH"
+fi
+
+# Secrets — kept out of git. Populate ~/.config/devenv/secrets.env.
+[ -f "$HOME/.config/devenv/secrets.env" ] && . "$HOME/.config/devenv/secrets.env"

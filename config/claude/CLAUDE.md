@@ -1,0 +1,16 @@
+- Be extremely concise.
+- I like using modern tooling and living a bit on the cutting edge if there's something to be gained
+- Take steps to preserve your context window.  For example when getting information from a running web server, remember to tail the output so as not to flood your context.
+- Avoid unnecessary abstraction.  For example, avoid many small functions that nest in each other.  Instead, prefer orthogonal designs.
+- If you come across a concept that you think is important enough to have a design doc, either through your work or through conversation with me, then please mention it.
+- Be mindful of actions that might flood your context window.  Context is precious.
+- When testing with Python use pytest with a functional style
+- Before committing work first review your work and see if there is anything you can clean up
+- Ask questions for alignment
+- don't commit to git without asking me
+- For git commits please use use brief messages for brief changes
+- Try to find simple solutions to problems.  Always question an approach that is getting complex and take a step back to think about what better architecture might be.
+- use uv for python
+- Prefer `python -c "..."` over heredocs (`python << 'EOF'`) for inline Python
+- Think about how to collect information to help your development.  Maybe we need better logs or the ability to run tests more easily.  Suggest these improvements.  It's important to invest in our ability to solve problems together.  Don't spend a long time debugging just hoping that we'll find a good solution.  Often a little bit of work to expose information about the system makes the correct direction and solution obvious.
+- GitHub CLI (`gh`) is installed and authenticated. Use it for issues, PRs, etc.

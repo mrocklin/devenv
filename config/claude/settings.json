@@ -1,0 +1,87 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(cat:*)",
+      "Bash(sort:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(file:*)",
+      "Bash(which:*)",
+      "Bash(pwd:*)",
+      "Bash(du:*)",
+      "Bash(df:*)",
+      "Bash(ps:*)",
+      "Bash(pgrep:*)",
+      "Bash(.venv/bin/pytest:*)",
+      "Bash(.venv/bin/pip:*)",
+      "Bash(uv pip:*)",
+      "Bash(uv run:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv venv:*)",
+      "Bash(curl:*)",
+      "Bash(lsof:*)",
+      "Bash(pkill:*)",
+      "Bash(cargo:*)",
+      "Bash(make:*)",
+      "Bash(maturin:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(pytest:*)",
+      "Bash(git log:*)",
+      "Bash(git bisect:*)",
+      "Bash(git add:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git worktree:*)",
+      "Bash(afplay:*)",
+      "Bash(paplay:*)",
+      "WebSearch",
+      "WebFetch",
+      "Skill",
+      "Read(~/workspace/**)",
+      "Glob(~/workspace/**)",
+      "Grep(~/workspace/**)",
+      "Read(/tmp/**)",
+      "Glob(/tmp/**)",
+      "Grep(/tmp/**)"
+    ],
+    "deny": [],
+    "ask": [],
+    "defaultMode": "auto"
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay -v 0.40 /System/Library/Sounds/Morse.aiff 2>/dev/null || paplay /usr/share/sounds/freedesktop/stereo/message.oga 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay -v 0.35 /System/Library/Sounds/Ping.aiff 2>/dev/null || paplay /usr/share/sounds/freedesktop/stereo/bell.oga 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  },
+  "voiceEnabled": true,
+  "skipAutoPermissionPrompt": true
+}

@@ -1,0 +1,24 @@
+[user]
+	name = Matthew Rocklin
+	email = mrocklin@gmail.com
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = true
+
+[alias]
+	ci = commit
+	di = diff --color-words
+	st = status
+	co = checkout
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
+[diff]
+	external = difft
