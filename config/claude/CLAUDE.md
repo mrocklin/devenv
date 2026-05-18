@@ -1,16 +1,78 @@
-- Be extremely concise.
-- I like using modern tooling and living a bit on the cutting edge if there's something to be gained
-- Take steps to preserve your context window.  For example when getting information from a running web server, remember to tail the output so as not to flood your context.
-- Avoid unnecessary abstraction.  For example, avoid many small functions that nest in each other.  Instead, prefer orthogonal designs.
-- If you come across a concept that you think is important enough to have a design doc, either through your work or through conversation with me, then please mention it.
-- Be mindful of actions that might flood your context window.  Context is precious.
-- When testing with Python use pytest with a functional style
-- Before committing work first review your work and see if there is anything you can clean up
-- Ask questions for alignment
-- don't commit to git without asking me
-- For git commits please use use brief messages for brief changes
-- Try to find simple solutions to problems.  Always question an approach that is getting complex and take a step back to think about what better architecture might be.
-- use uv for python
-- Prefer `python -c "..."` over heredocs (`python << 'EOF'`) for inline Python
-- Think about how to collect information to help your development.  Maybe we need better logs or the ability to run tests more easily.  Suggest these improvements.  It's important to invest in our ability to solve problems together.  Don't spend a long time debugging just hoping that we'll find a good solution.  Often a little bit of work to expose information about the system makes the correct direction and solution obvious.
-- GitHub CLI (`gh`) is installed and authenticated. Use it for issues, PRs, etc.
+## Communication
+
+Be extremely concise.
+Avoid unnecessary words.
+Ask questions for alignment.
+
+## Python
+
+-  Use `uv` for python
+
+## Testing
+
+Prefer black-box tests that test behavior at API boundaries.
+For Python, use `pytest` in a functional (not class) style with fixtures.
+For tricky problems I like TDD.  I like aligning on tests first for behavior before implementing.
+
+## Git
+
+Don't commit to git without asking me.
+Never push.
+Use brief messages for small changes.
+
+## Abstraction
+
+Find simple solutions.  Always question a solution if it's getting complex.
+Avoid unnecessary abstraction.
+Avoid indirection.
+Prefer flat hierarchies.
+For example, don't create functions that get used only once.  I prefer inlined code, even if it results in a large block, over lots of indirection.
+
+## Feedback
+
+It's critical to have good feedback mechanisms for what we're working on.  These include:
+
+-  Good tests
+-  Benchmarks
+-  Logs and metrics
+
+When we work on something always make sure we have feedback systems set up.  If you can't identify sufficient feedback systems stop and work on setting those up first.
+
+It's critical that feedback be FAST.  Ideally around a second or less.  If our feedback system takes minutes then stop and think about alternatives that are faster.
+
+If you spend a lot of time during exeuction and iteration figuring out how to get feedback (like python scripts to queries APIs) then consider building small scripts to improve the feedback system.
+
+## Claude Chic
+
+If you're claude then you're probably being run within `claudechic`, an alternative harness for Claude that includes some multi-agent capabilities, including the ability to spawn new agents and git worktrees.  If I ask for a worktree or an agent, use the chic mcp server.  If I ask for a subagent, use normal claude subagents.
+
+## Workflow
+
+I like work to proceed in the following phases:
+
+### Phase 1: Planning
+
+We make a plan together.  You ask questions to make sure that we're aligned.
+In the plan make sure you have a way to get live feedback about the thing we're building.  Feedback is critical to iterating to success.
+
+### Phase 2: Execution
+
+You do work to implement the plan, raising concerns along the way if something comes up.
+
+### Phase 3: Testing and Iteration
+
+Use our feedback systems (should already be implemented as part of the plan) to get feedback about how well our system works.  Iterate given that feedback.
+
+### Phase 4: Self review
+
+Review our work so far and see if there is anything you can clean up or simplify.  Don't use other agents at this phase.  Do this yourself.
+
+### Phase 5: Agent Review
+
+Spawn a new agent (using the chic mcp server) to review your work.  Learn who you are using the chic mcp server whoami command and tell the new agent (as part of your initial spawning) what you're trying to accomplish and how to review it.  Tell it to be critical.  Tell it to send a report of its findings back to you given the chic mcp server and the name you've discovered from whoami.
+
+Close the agent when you're done.
+
+## Github
+
+You should have access to the github `gh` CLI and the `@mrocklin-ai` bot account.  This should give you the ability to read and comment on various repositories.  When communicating with others, please be concise and friendly.  Be sure to thank them.
