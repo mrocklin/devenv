@@ -248,6 +248,19 @@ if [ -n "\$PS1" ] && [ -z "\$ZSH_VERSION" ] && command -v zsh >/dev/null 2>&1; t
 fi
 EOF
     fi
+
+    # Ensure login bash sources .bashrc. Ubuntu's default .profile does this,
+    # but rustup may overwrite .profile with just its env source. Create a
+    # .bash_profile (bash prefers this) that explicitly sources both.
+    local bash_profile="$HOME/.bash_profile"
+    if [ ! -e "$bash_profile" ]; then
+        log "creating ~/.bash_profile (sources .profile + .bashrc)"
+        cat > "$bash_profile" <<'EOF'
+# devenv: bash login profile.
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+[ -f "$HOME/.bashrc"  ] && . "$HOME/.bashrc"
+EOF
+    fi
 }
 
 # ---------- main ----------

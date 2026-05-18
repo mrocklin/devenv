@@ -3,3 +3,7 @@
 
 # SSH strips COLORTERM; re-declare so TUIs (claudechic, etc.) pick truecolor.
 export COLORTERM=truecolor
+
+# Login shell is bash (trampoline execs zsh); make $SHELL match reality so
+# tools that read it (vim :sh, tmux, scripts) spawn zsh subshells.
+export SHELL="$(command -v zsh)"
