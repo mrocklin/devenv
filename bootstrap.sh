@@ -45,11 +45,22 @@ install_linux_packages() {
         ripgrep fd-find bat fzf jq tree btop \
         build-essential pkg-config libssl-dev \
         nodejs npm \
+        software-properties-common \
         sound-theme-freedesktop
 
     install_nvim_linux
     install_gh_linux
     install_starship
+    install_et_linux
+}
+
+# Eternal terminal — survives network drops / roaming.
+install_et_linux() {
+    command -v et >/dev/null 2>&1 && { log "et already installed"; return; }
+    log "Installing eternal terminal"
+    # add-apt-repository -y runs apt-get update internally.
+    $SUDO add-apt-repository -y ppa:jgmath2000/et
+    $SUDO apt-get install -y et
 }
 
 # Ubuntu's apt ships nvim too old for our init.lua (needs ≥ 0.11).

@@ -21,6 +21,7 @@ brew "btop"
 brew "git-delta"
 brew "difftastic"
 brew "fzf"
+brew "et"             # eternal terminal — survives roaming/disconnects
 
 # Languages / data
 brew "awscli"
