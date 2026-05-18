@@ -111,6 +111,7 @@ require("lazy").setup({
   -- Treesitter for better syntax highlighting
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",  -- new main branch dropped the configs module API
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({

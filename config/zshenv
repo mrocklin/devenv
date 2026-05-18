@@ -1,2 +1,5 @@
 # ~/.zshenv — sourced for all zsh invocations (incl. non-interactive).
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# SSH strips COLORTERM; re-declare so TUIs (claudechic, etc.) pick truecolor.
+export COLORTERM=truecolor

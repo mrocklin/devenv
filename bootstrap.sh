@@ -44,6 +44,7 @@ install_linux_packages() {
         zsh \
         ripgrep fd-find bat fzf jq tree btop \
         build-essential pkg-config libssl-dev \
+        nodejs npm \
         sound-theme-freedesktop
 
     install_nvim_linux
@@ -87,7 +88,9 @@ install_gh_linux() {
 install_starship() {
     command -v starship >/dev/null 2>&1 && { log "starship already installed"; return; }
     log "Installing starship"
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
+    # Pipe through $SUDO so the installer doesn't try (and fail without a TTY)
+    # to escalate on its own. Force install dir explicitly.
+    curl -sS https://starship.rs/install.sh | $SUDO sh -s -- -y -b /usr/local/bin
 }
 
 install_packages() {
@@ -151,6 +154,16 @@ install_claude_plugins() {
     claude plugin install claude-bash-permissions@mrocklin          >/dev/null 2>&1 || warn "claude-bash-permissions install failed"
     claude plugin install pyright-lsp@claude-plugins-official       >/dev/null 2>&1 || warn "pyright-lsp install failed"
     claude plugin install rust-analyzer-lsp@claude-plugins-official >/dev/null 2>&1 || warn "rust-analyzer-lsp install failed"
+}
+
+# Pre-install nvim plugins, treesitter parsers, and mason LSPs so the editor
+# is fully usable after first launch (no async surprises). Lazy auto-installs
+# missing plugins during init.lua, so a single headless call covers everything.
+warmup_nvim() {
+    command -v nvim >/dev/null 2>&1 || { warn "nvim not on PATH, skipping warmup"; return; }
+    log "Warming up nvim (treesitter parsers + mason LSPs — can take a few minutes)"
+    nvim --headless -c "luafile $DEVENV_DIR/config/nvim/scripts/warmup.lua" -c "qa" \
+        || warn "nvim warmup had issues — retry via :Lazy / :Mason / :TSUpdate"
 }
 
 # ---------- symlinks ----------
@@ -251,10 +264,11 @@ main() {
     install_claudechic
     symlink_configs
     install_claude_plugins
+    warmup_nvim
     setup_shell
 
     log "Done. Open a new shell."
-    log "Next: fill in ~/.config/devenv/secrets.env, then run 'nvim' once to install plugins."
+    log "Next: fill in ~/.config/devenv/secrets.env."
 }
 
 main "$@"
