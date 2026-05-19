@@ -1,6 +1,7 @@
 format = """$character"""
 
 right_format = """
+$hostname\
 $directory\
 $git_branch\
 """
@@ -16,3 +17,10 @@ vimcmd_symbol = "[❮](green)"
 [git_branch]
 format = "[$branch]($style)"
 style = "bright-black"
+
+# Show hostname only when SSH'd in, so local prompts stay minimal but remote
+# sessions are visually distinct. Set the hostname per-box with hostnamectl.
+[hostname]
+ssh_only = true
+format = "[$hostname]($style) "
+style = "yellow dimmed"

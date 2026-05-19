@@ -3,6 +3,9 @@
 # Prompt + vi mode
 PROMPT="%~$ "
 set -o vi
+# vi-mode kills backspace at the insert-mode boundary; rebind so it always works.
+bindkey '^?' backward-delete-char
+bindkey '^H' backward-delete-char
 eval "$(starship init zsh)"
 
 # Completion

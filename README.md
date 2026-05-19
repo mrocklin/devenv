@@ -39,6 +39,19 @@ AGENT.md            instructions for a Claude agent driving the setup
 
 This repo lives at `~/devenv` (or wherever you clone it). Configs are **symlinked**, so editing `~/.zshrc` actually edits `config/zshrc` in this repo. Commit and push to sync across machines.
 
+## Ghostty + ssh to a new box
+
+Ghostty advertises `TERM=xterm-ghostty`, but its terminfo entry lives only on
+the machine ghostty is installed on. The first time you ssh from a ghostty
+terminal to a new remote, copy the entry over:
+
+```sh
+infocmp -x xterm-ghostty | ssh <host> 'tic -x -'
+```
+
+Without this, zsh on the remote silently disables features that depend on
+terminal capabilities — e.g. the right-side prompt with hostname / git branch.
+
 ## See also
 
 - [AGENT.md](./AGENT.md) — how to brief an agent to run the setup on a new box
