@@ -39,6 +39,13 @@ AGENT.md            instructions for a Claude agent driving the setup
 
 This repo lives at `~/devenv` (or wherever you clone it). Configs are **symlinked**, so editing `~/.zshrc` actually edits `config/zshrc` in this repo. Commit and push to sync across machines.
 
+## Eternal terminal on a remote box
+
+`bootstrap.sh` on linux installs `et` and enables the `etserver` systemd unit
+(listening on tcp/2022). If the box is behind a cloud firewall (Hetzner, AWS
+security group, etc.), open tcp/2022 inbound — the local host has no ufw /
+iptables rules to change. Then `et <host>` works the same as ssh.
+
 ## Ghostty + ssh to a new box
 
 Ghostty advertises `TERM=xterm-ghostty`, but its terminfo entry lives only on

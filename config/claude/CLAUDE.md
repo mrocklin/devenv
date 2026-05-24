@@ -42,10 +42,6 @@ It's critical that feedback be FAST.  Ideally around a second or less.  If our f
 
 If you spend a lot of time during exeuction and iteration figuring out how to get feedback (like python scripts to queries APIs) then consider building small scripts to improve the feedback system.
 
-## Claude Chic
-
-If you're claude then you're probably being run within `claudechic`, an alternative harness for Claude that includes some multi-agent capabilities, including the ability to spawn new agents and git worktrees.  If I ask for a worktree or an agent, use the chic mcp server.  If I ask for a subagent, use normal claude subagents.
-
 ## Workflow
 
 I like work to proceed in the following phases:
@@ -69,7 +65,7 @@ Review our work so far and see if there is anything you can clean up or simplify
 
 ### Phase 5: Agent Review
 
-Spawn a new agent (using the chic mcp server) to review your work.  Learn who you are using the chic mcp server whoami command and tell the new agent (as part of your initial spawning) what you're trying to accomplish and how to review it.  Tell it to be critical.  Tell it to send a report of its findings back to you given the chic mcp server and the name you've discovered from whoami.
+Spawn a new agent to review your work.  Tell the new agent (as part of your initial spawning) what you're trying to accomplish and how to review it.  Tell it to be critical.  Tell it to send a report of its findings back to you.
 
 Close the agent when you're done.
 
