@@ -484,7 +484,8 @@ vim.lsp.config.rust_analyzer = {
   capabilities = capabilities,
   settings = {
     ["rust-analyzer"] = {
-      checkOnSave = {
+      checkOnSave = true,
+      check = {
         command = "clippy",
       },
     },
