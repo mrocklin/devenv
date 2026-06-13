@@ -11,6 +11,7 @@ brew "coreutils"      # gtimeout etc.
 brew "tree"
 brew "jq"
 brew "node"
+brew "pnpm"
 
 # Modern CLI replacements
 brew "ripgrep"
