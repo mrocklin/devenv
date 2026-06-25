@@ -148,12 +148,6 @@ install_claude_code() {
     curl -fsSL https://claude.ai/install.sh | bash
 }
 
-install_claudechic() {
-    command -v claudechic >/dev/null 2>&1 && { log "claudechic already installed"; return; }
-    log "Installing claudechic"
-    uv tool install claudechic
-}
-
 install_claude_plugins() {
     command -v claude >/dev/null 2>&1 || { warn "claude not on PATH, skipping plugin install"; return; }
 
@@ -221,7 +215,6 @@ symlink_configs() {
     link "$DEVENV_DIR/config/claude/CLAUDE.md"        "$HOME/.claude/CLAUDE.md"
     link "$DEVENV_DIR/config/claude/commands"         "$HOME/.claude/commands"
     link "$DEVENV_DIR/config/claude/skills"           "$HOME/.claude/skills"
-    link "$DEVENV_DIR/config/claude/claudechic.yaml"  "$HOME/.claude/.claudechic.yaml"
     seed "$DEVENV_DIR/config/claude/settings.json"    "$HOME/.claude/settings.json"
 
     if [ "$OS" = "Darwin" ]; then
@@ -285,7 +278,6 @@ main() {
     install_uv
     install_cargo_tools_linux
     install_claude_code
-    install_claudechic
     symlink_configs
     install_claude_plugins
     warmup_nvim

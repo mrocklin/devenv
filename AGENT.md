@@ -27,7 +27,7 @@ Run `./bootstrap.sh` and verify it succeeded. Get the shell, editor, and core CL
 2. **Start a fresh shell before verifying** — the bootstrap script appends to PATH but those exports don't survive into a new tool invocation by you. Either `source ~/.zshrc` or open a fresh `zsh -l`.
 
 3. **Verify**:
-   - `which nvim git starship uv cargo gh claude claudechic` — all should resolve
+   - `which nvim git starship uv cargo gh claude` — all should resolve
    - `nvim --version | head -1` — must be ≥ v0.11 (init.lua uses `vim.lsp.config` / `vim.lsp.enable`)
    - `zsh -ic 'echo $PROMPT'` — starship should be active
    - `ls -la ~/.zshrc ~/.gitconfig ~/.config/nvim/init.lua ~/.claude/CLAUDE.md` — should be symlinks pointing into the devenv repo
