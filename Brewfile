@@ -30,9 +30,6 @@ brew "libpq"          # psql etc.
 brew "ffmpeg"
 brew "cairo"
 
-# Infra
-brew "hashicorp/tap/terraform"
-
 # Apps
 cask "ghostty"
 cask "aerospace"
