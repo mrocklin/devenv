@@ -112,13 +112,17 @@ install_et_linux() {
     $SUDO apt-get install -y et
 }
 
-# Ubuntu's apt ships nvim too old for our init.lua (needs ≥ 0.11).
-# Install the official prebuilt tarball to /usr/local/nvim.
+# Pin to the 0.11.x line. Our nvim-treesitter is the archived master branch,
+# whose query-directive handlers are incompatible with nvim 0.12's treesitter
+# API — render-markdown crashes on .md files. The mac runs 0.11.x via brew, so
+# match it here. (Ubuntu's apt nvim is too old regardless.) Revisit this pin
+# alongside a treesitter-main migration, not on its own.
 install_nvim_linux() {
-    if command -v nvim >/dev/null 2>&1 && nvim --version | head -1 | awk '{print $2}' | grep -qE 'v(0\.(1[1-9]|[2-9][0-9])|[1-9])'; then
-        log "nvim already new enough"; return
+    local nvim_version="v0.11.7"
+    if command -v nvim >/dev/null 2>&1 && nvim --version | head -1 | grep -qF "${nvim_version#v}"; then
+        log "nvim ${nvim_version} already installed"; return
     fi
-    log "Installing neovim from official release"
+    log "Installing neovim ${nvim_version} from official release"
     local arch tarball
     case "$(uname -m)" in
         x86_64)  arch="x86_64" ;;
@@ -126,7 +130,7 @@ install_nvim_linux() {
         *) err "unsupported arch for nvim install: $(uname -m)" ;;
     esac
     tarball="nvim-linux-${arch}.tar.gz"
-    curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/${tarball}" -o "/tmp/${tarball}"
+    curl -fsSL "https://github.com/neovim/neovim/releases/download/${nvim_version}/${tarball}" -o "/tmp/${tarball}"
     $SUDO rm -rf /usr/local/nvim
     $SUDO mkdir -p /usr/local/nvim
     $SUDO tar -xzf "/tmp/${tarball}" -C /usr/local/nvim --strip-components=1
