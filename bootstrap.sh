@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Idempotent bootstrap for Matt's dev environment.
-# Tested on macOS (Apple Silicon) and Ubuntu/Debian.
+# Tested on macOS (Apple Silicon), Ubuntu/Debian, and Amazon Linux 2023.
 
 set -euo pipefail
 
@@ -32,9 +32,7 @@ install_macos_packages() {
     brew bundle --file="$DEVENV_DIR/Brewfile"
 }
 
-install_linux_packages() {
-    command -v apt-get >/dev/null 2>&1 || err "apt-get not found; this bootstrap targets Debian/Ubuntu"
-
+install_debian_packages() {
     log "apt-get update"
     $SUDO apt-get update
 
@@ -52,6 +50,57 @@ install_linux_packages() {
     install_gh_linux
     install_starship
     install_et_linux
+}
+
+# Amazon Linux 2023 (dnf). Its repos carry the basics (zsh, toolchain) but none
+# of the modern CLI tools — ripgrep/fd/bat/eza/delta/difftastic come from cargo
+# (see install_cargo_tools_linux), fzf/btop from upstream release binaries.
+install_amazonlinux_packages() {
+    log "dnf install base packages"
+    # Note: no 'curl' — AL2023 ships curl-minimal (provides /usr/bin/curl), and
+    # asking for full curl forces a conflicting erase.
+    $SUDO dnf install -y \
+        git ca-certificates zsh jq tree \
+        gcc gcc-c++ make pkgconf-pkg-config openssl-devel
+    # Don't disturb an existing node (box may manage it outside dnf).
+    command -v node >/dev/null 2>&1 || $SUDO dnf install -y nodejs npm
+
+    install_nvim_linux        # official tarball — AL2023's glibc 2.34 is new enough
+    install_starship
+    install_fzf_linux
+    install_btop_linux
+
+    # gh/et aren't in AL2023's default repos; they ship preinstalled on our box.
+    command -v gh >/dev/null 2>&1 || warn "gh missing — add the cli.github.com dnf repo and 'dnf install gh'"
+    command -v et >/dev/null 2>&1 || warn "et missing — no AL2023 package; build eternal-terminal from source if wanted"
+}
+
+# fzf's own installer fetches the right prebuilt binary for the platform.
+install_fzf_linux() {
+    command -v fzf >/dev/null 2>&1 && { log "fzf already installed"; return; }
+    log "Installing fzf"
+    rm -rf "$HOME/.fzf"
+    git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" \
+        && "$HOME/.fzf/install" --bin >/dev/null \
+        && $SUDO ln -sf "$HOME/.fzf/bin/fzf" /usr/local/bin/fzf \
+        || warn "fzf install failed — retry later with ~/.fzf/install --bin"
+}
+
+# btop ships a static musl binary per arch; asset names are version-independent.
+install_btop_linux() {
+    command -v btop >/dev/null 2>&1 && { log "btop already installed"; return; }
+    log "Installing btop"
+    local arch
+    case "$(uname -m)" in
+        x86_64)  arch="x86_64"  ;;
+        aarch64) arch="aarch64" ;;
+        *) warn "no btop binary for $(uname -m), skipping"; return ;;
+    esac
+    local tmpd; tmpd="$(mktemp -d)"
+    { curl -fsSL "https://github.com/aristocratos/btop/releases/latest/download/btop-${arch}-unknown-linux-musl.tar.gz" -o "$tmpd/btop.tar.gz" \
+        && tar -xzf "$tmpd/btop.tar.gz" -C "$tmpd" \
+        && $SUDO install -m755 "$tmpd/btop/bin/btop" /usr/local/bin/btop; } || warn "btop install failed"
+    rm -rf "$tmpd"
 }
 
 # Eternal terminal — survives network drops / roaming.
@@ -107,7 +156,15 @@ install_starship() {
 install_packages() {
     case "$OS" in
         Darwin) install_macos_packages ;;
-        Linux)  install_linux_packages ;;
+        Linux)
+            if command -v apt-get >/dev/null 2>&1; then
+                install_debian_packages
+            elif command -v dnf >/dev/null 2>&1; then
+                install_amazonlinux_packages
+            else
+                err "no supported package manager (apt-get or dnf) found"
+            fi
+            ;;
         *)      err "Unsupported OS: $OS" ;;
     esac
 }
@@ -126,13 +183,20 @@ install_uv() {
     curl -LsSf https://astral.sh/uv/install.sh | sh
 }
 
-# Linux-only: cargo-managed tools not in Ubuntu apt with up-to-date versions.
+# Linux-only: cargo-managed tools the distro doesn't package at usable versions.
+# eza/delta/difftastic are missing on both Debian and AL2023. AL2023 additionally
+# lacks ripgrep/fd/bat (Debian gets those from apt), so build them here too.
 install_cargo_tools_linux() {
     [ "$OS" = "Linux" ] || return 0
     local to_build=()
     command -v eza   >/dev/null 2>&1 || to_build+=(eza)
     command -v delta >/dev/null 2>&1 || to_build+=(git-delta)
     command -v difft >/dev/null 2>&1 || to_build+=(difftastic)
+    if ! command -v apt-get >/dev/null 2>&1; then
+        command -v rg  >/dev/null 2>&1 || to_build+=(ripgrep)
+        command -v fd  >/dev/null 2>&1 || to_build+=(fd-find)
+        command -v bat >/dev/null 2>&1 || to_build+=(bat)
+    fi
     [ ${#to_build[@]} -eq 0 ] && { log "cargo tools already installed"; return; }
     log "Building ${to_build[*]} from source (this can take several minutes)"
     for tool in "${to_build[@]}"; do
@@ -166,8 +230,15 @@ install_claude_plugins() {
 # missing plugins during init.lua, so a single headless call covers everything.
 warmup_nvim() {
     command -v nvim >/dev/null 2>&1 || { warn "nvim not on PATH, skipping warmup"; return; }
+    # Lazy installs branch tips on first run, but lazy-lock.json pins known-good
+    # commits — notably nvim-treesitter, whose master tip was archived without the
+    # configs module our init.lua uses. Install everything, then restore to the
+    # lockfile so the pinned (working) commits win before we build parsers.
+    log "Installing + pinning nvim plugins to lazy-lock.json"
+    nvim --headless "+Lazy! install" +qa </dev/null 2>/dev/null || warn "lazy install had issues"
+    nvim --headless "+Lazy! restore" +qa </dev/null 2>/dev/null || warn "lazy restore had issues"
     log "Warming up nvim (treesitter parsers + mason LSPs — can take a few minutes)"
-    nvim --headless -c "luafile $DEVENV_DIR/config/nvim/scripts/warmup.lua" -c "qa" \
+    nvim --headless -c "luafile $DEVENV_DIR/config/nvim/scripts/warmup.lua" -c "qa" </dev/null \
         || warn "nvim warmup had issues — retry via :Lazy / :Mason / :TSUpdate"
 }
 
