@@ -31,7 +31,7 @@ Run `./bootstrap.sh` and verify it succeeded. Get the shell, editor, and core CL
    - `nvim --version | head -1` — must be ≥ v0.11 (init.lua uses `vim.lsp.config` / `vim.lsp.enable`)
    - `zsh -ic 'echo $PROMPT'` — starship should be active
    - `ls -la ~/.zshrc ~/.gitconfig ~/.config/nvim/init.lua ~/.claude/CLAUDE.md` — should be symlinks pointing into the devenv repo
-   - `claude plugin list` — should show `claude-bash-permissions`, `pyright-lsp`, `rust-analyzer-lsp`
+   - `claude plugin list` — should show `pyright-lsp`, `rust-analyzer-lsp`
    - Launch `nvim` once; lazy.nvim will bootstrap and install plugins. Wait for `:Lazy` to finish, then `:q`.
 
 4. **Prompt Matt** to fill in `~/.config/devenv/secrets.env` (don't touch it yourself — secrets are his).

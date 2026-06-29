@@ -221,10 +221,8 @@ install_claude_plugins() {
 
     log "Adding claude plugin marketplaces"
     claude plugin marketplace add anthropics/claude-plugins-official >/dev/null 2>&1 || true
-    claude plugin marketplace add mrocklin/claude-bash-permissions   >/dev/null 2>&1 || true
 
     log "Installing claude plugins"
-    claude plugin install claude-bash-permissions@mrocklin          >/dev/null 2>&1 || warn "claude-bash-permissions install failed"
     claude plugin install pyright-lsp@claude-plugins-official       >/dev/null 2>&1 || warn "pyright-lsp install failed"
     claude plugin install rust-analyzer-lsp@claude-plugins-official >/dev/null 2>&1 || warn "rust-analyzer-lsp install failed"
 }
