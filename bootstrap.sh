@@ -221,12 +221,18 @@ install_cargo_tools_linux() {
     done
 }
 
-# ---------- claude tooling ----------
+# ---------- agent CLIs ----------
 
 install_claude_code() {
     command -v claude >/dev/null 2>&1 && { log "claude already installed"; return; }
     log "Installing claude code"
     curl -fsSL https://claude.ai/install.sh | bash
+}
+
+install_codex() {
+    command -v codex >/dev/null 2>&1 && { log "codex already installed"; return; }
+    log "Installing codex"
+    curl -fsSL https://chatgpt.com/codex/install.sh | sh
 }
 
 install_claude_plugins() {
@@ -365,6 +371,7 @@ main() {
     install_uv
     install_cargo_tools_linux
     install_claude_code
+    install_codex
     symlink_configs
     install_claude_plugins
     warmup_nvim

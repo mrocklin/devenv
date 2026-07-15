@@ -23,7 +23,7 @@ $EDITOR ~/.config/devenv/secrets.env   # fill in real values
 - **Editor**: neovim with a lazy.nvim-based config (LSP, Telescope, Treesitter, kanagawa)
 - **CLI**: git, gh, ripgrep, fd, bat, eza, jq, delta, difftastic, btop, tree, fzf
 - **Languages**: rust (via rustup), uv (python), node
-- **Claude**: claude code, with `~/.claude/{CLAUDE.md, commands, skills, hooks}` symlinked and the pyright-lsp / rust-analyzer-lsp plugins installed
+- **Agent CLIs**: claude code (with `~/.claude/{CLAUDE.md, commands, skills, hooks}` symlinked and the pyright-lsp / rust-analyzer-lsp plugins installed) and codex
 - **macOS extras**: aerospace tiling WM, ghostty terminal, 1Password CLI
 
 ## Layout
