@@ -173,6 +173,19 @@ install_packages() {
     esac
 }
 
+# Ghostty advertises TERM=xterm-ghostty, but that terminfo entry ships only on
+# the machine ghostty runs on — a fresh remote doesn't have it, so backspace and
+# cursor keys misbehave over ssh. bootstrap runs ON the remote (no ghostty to
+# infocmp from), so we vendor the entry in the repo and compile it with tic.
+# Regenerate config/terminfo/xterm-ghostty.ti with `infocmp -x xterm-ghostty`
+# if ghostty gains capabilities. On mac the entry already exists (early return).
+install_ghostty_terminfo() {
+    command -v tic >/dev/null 2>&1 || { warn "tic not found, skipping ghostty terminfo"; return; }
+    infocmp xterm-ghostty >/dev/null 2>&1 && { log "ghostty terminfo already present"; return; }
+    log "Installing ghostty terminfo"
+    tic -x "$DEVENV_DIR/config/terminfo/xterm-ghostty.ti" || warn "ghostty terminfo install failed"
+}
+
 # ---------- toolchains ----------
 
 install_rust() {
@@ -347,6 +360,7 @@ main() {
     log "repo: $DEVENV_DIR"
 
     install_packages
+    install_ghostty_terminfo
     install_rust
     install_uv
     install_cargo_tools_linux

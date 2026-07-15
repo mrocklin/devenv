@@ -49,15 +49,20 @@ iptables rules to change. Then `et <host>` works the same as ssh.
 ## Ghostty + ssh to a new box
 
 Ghostty advertises `TERM=xterm-ghostty`, but its terminfo entry lives only on
-the machine ghostty is installed on. The first time you ssh from a ghostty
-terminal to a new remote, copy the entry over:
+the machine ghostty is installed on. Without it on a remote, zsh silently
+disables features that depend on terminal capabilities (e.g. the right-side
+prompt) and keys like backspace misbehave over ssh.
+
+`bootstrap.sh` handles this: the entry is vendored at
+`config/terminfo/xterm-ghostty.ti` and compiled with `tic` on every box.
+Nothing to do by hand — just reconnect after bootstrap.
+
+If ghostty gains terminfo capabilities (version upgrade), regenerate the
+vendored file from a ghostty machine and commit it:
 
 ```sh
-infocmp -x xterm-ghostty | ssh <host> 'tic -x -'
+infocmp -x xterm-ghostty > config/terminfo/xterm-ghostty.ti
 ```
-
-Without this, zsh on the remote silently disables features that depend on
-terminal capabilities — e.g. the right-side prompt with hostname / git branch.
 
 ## See also
 
