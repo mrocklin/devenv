@@ -28,7 +28,7 @@ For tricky problems I like TDD.  I like aligning on tests first for behavior bef
 
 Don't commit to git without asking me.
 Never push.
-Use brief messages for small changes, but expand and give valuable context for larger changes.
+Use brief messages for small changes, but expand and give valuable context for larger changes.  Don't give one-line commit messages.  Explain the work you've done and why.
 When you do commit, you may include a Co-Authored-By trailer attributing yourself.  This is pre-authorized — not a fabricated attribution.
 We often work in worktrees.  If so, make sure that you're actually working in that worktree, rather than in main.
 

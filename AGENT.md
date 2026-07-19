@@ -12,7 +12,7 @@ Run `./bootstrap.sh` and verify it succeeded. Get the shell, editor, and core CL
 - **Shell**: zsh on both. On linux we don't `chsh` — `.bashrc` is set up to `exec zsh -l` when an interactive shell starts. If you `ssh` in and find yourself in bash, just type `zsh`.
 - **Sudo**: bootstrap uses `sudo` on linux for apt and a couple of `/usr/local` writes. If you're running as root, it auto-skips sudo. If you're a non-root user without sudo rights, package install will fail — tell Matt and stop.
 - **Backup**: existing dotfiles get moved into `~/.devenv-backup-<timestamp>/` (not deleted). On a previously-configured machine this can be substantial. Mention the backup path to Matt after running.
-- **Style preferences** (these are in `config/claude/CLAUDE.md` which gets symlinked to `~/.claude/CLAUDE.md`):
+- **Style preferences** (these live in `config/_AGENTS.md`, symlinked to both `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` so Claude and Codex share one set of instructions):
   - Be concise.
   - Prefer modern tooling (uv, ripgrep, fd, bat, eza, neovim, starship).
   - Avoid unnecessary abstraction.
@@ -30,7 +30,7 @@ Run `./bootstrap.sh` and verify it succeeded. Get the shell, editor, and core CL
    - `which nvim git starship uv cargo gh claude` — all should resolve
    - `nvim --version | head -1` — must be ≥ v0.11 (init.lua uses `vim.lsp.config` / `vim.lsp.enable`)
    - `zsh -ic 'echo $PROMPT'` — starship should be active
-   - `ls -la ~/.zshrc ~/.gitconfig ~/.config/nvim/init.lua ~/.claude/CLAUDE.md` — should be symlinks pointing into the devenv repo
+   - `ls -la ~/.zshrc ~/.gitconfig ~/.config/nvim/init.lua ~/.claude/CLAUDE.md ~/.codex/AGENTS.md` — should be symlinks pointing into the devenv repo (the last two both point at `config/_AGENTS.md`)
    - `claude plugin list` — should show `pyright-lsp`, `rust-analyzer-lsp`
    - Launch `nvim` once; lazy.nvim will bootstrap and install plugins. Wait for `:Lazy` to finish, then `:q`.
 

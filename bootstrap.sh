@@ -303,8 +303,13 @@ symlink_configs() {
     link "$DEVENV_DIR/config/nvim"           "$HOME/.config/nvim"
     link "$DEVENV_DIR/config/gh/config.yml"  "$HOME/.config/gh/config.yml"
 
+    # Shared agent instructions — one source, landed under each tool's expected
+    # name. Kept as _AGENTS.md in the repo so agents working in config/ don't
+    # mistake it for their own AGENTS.md.
+    link "$DEVENV_DIR/config/_AGENTS.md"              "$HOME/.claude/CLAUDE.md"
+    link "$DEVENV_DIR/config/_AGENTS.md"              "$HOME/.codex/AGENTS.md"
+
     # Claude — static content is symlinked; settings.json is seeded (claude mutates it)
-    link "$DEVENV_DIR/config/claude/CLAUDE.md"        "$HOME/.claude/CLAUDE.md"
     link "$DEVENV_DIR/config/claude/commands"         "$HOME/.claude/commands"
     link "$DEVENV_DIR/config/claude/skills"           "$HOME/.claude/skills"
     seed "$DEVENV_DIR/config/claude/settings.json"    "$HOME/.claude/settings.json"
