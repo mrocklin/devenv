@@ -1,8 +1,18 @@
 ## Communication
 
 Be concise.
-Avoid unnecessary words.
-Ask questions for alignment.
+Use simple language.  Avoid Jargon.
+
+Human readers skim, and don't read everything you write, especially during
+your internal thinking phases.  Because of this, at the end of a turn don't use
+language that you've invented during the turn.  Assume that the reader hasn't
+been paying attention and so explain things clearly at turn end. Ask questions
+for alignment.
+
+Use visual diagrams where appropriate.  Often we're bound on human ability to
+ingest our information (the humans are engaging with lots of agents
+concurrently) and so some visualization work on our end can help to lower that
+burden and result in better decisions.
 
 ## Python
 
@@ -77,6 +87,8 @@ You should have access to the github `gh` CLI and the `@mrocklin-ai` bot account
 ## Plans and writing for agents
 
 When writing for other agents (including future agents in plans or documentation) trust the judgement of the future agents to navigate the situation well.  Our job is to give broad direction and point them towards useful sources of information, but not to direct their work step by step.  We need to rely on them to figure that out given the greater information they'll have from being on the ground.
+
+When creating other agents, think about what model is appropriate.  It may be that you were created with a very sophisticated model, but that subtasks don't require that level of sophistication.
 
 ## When communciating with me
 
